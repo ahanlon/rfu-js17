@@ -36,6 +36,8 @@ var FoodItem = function(name, cal, vegan, glutenFree, citrusFree ){
 	var sweetSour = new FoodItem('sweetSour', 100, true, true, false);
 	var salt = new FoodItem('salt', 0, true, true, true);
 
+	var buyButton = $('<button class="order-btn">Order</button>');
+
 // Object Classes
 
 var Drink = function(name, description, price, ingredients){
@@ -47,7 +49,9 @@ var Drink = function(name, description, price, ingredients){
 }
 	
 	Drink.prototype.create = function(){
-			var drink = $('<div class="drink">').text( this.name + ' \n' + this.description + ' \n' + '$' + this.price + ' \n' + 'Ingredients: ' + this.ingredients );
+			var drink = $('<div class="menu-item">');
+			var descrip = $('<p> class="descrip"</p>').text( this.name + ' \n' + this.description + ' \n' + '$' + this.price );
+			drink.append(descrip, buyButton);
 			return drink;
 		}
 	// Drink.prototype.toString = function(){
@@ -65,10 +69,15 @@ var Plate = function(name, description, price, ingredients){
 }
 	// my create function to create the Div in the DOM
 	Plate.prototype.create = function(){
-			var food = $('<div class="plate">').text( this.name + ' \n' + this.description + ' \n' + '$' + this.price + ' \n' + 'Ingredients: ' + this.ingredients );
+			var food = $('<div class="menu-item">');
+			var foodName = $('<div class="food name"></div>').text( this.name );
+			var foodDescrip = $('<div class="food descrip"></div>').text( this.description );
+			var foodPrice = $('<div class="food price"></div>').text("$" + this.price);
+
+			food.append(foodName, foodDescrip, foodPrice, buyButton.clone());
 			return food;
+
 		}
-		
 
 
 	// Plate.prototype.toString = function(){
@@ -103,11 +112,11 @@ var Plate = function(name, description, price, ingredients){
 			}
 		}
 
-		var burritoPlate = new Plate('Burrito', 'A delicious burrito! ', 8, [burrito, rice, beans]);
+		var burritoPlate = new Plate('El Burrito', 'A delicious burrito! ', 8, [burrito, rice, beans]);
 
-		var guacamolePlate = new Plate('Guac', 'Green and Good ', 4, [guacamole, cornChips, salsa]);
+		var guacamolePlate = new Plate('The Guac', 'Green and Good! ', 4, [guacamole, cornChips, salsa]);
 
-		var margaritaDrink = new Drink('Margarita', 'Top Shelf ', 12, [tequila, sweetSour, salt]);
+		var margaritaDrink = new Drink('Margarita', 'Top Shelf! ', 12, [tequila, sweetSour, salt]);
 
 var Order = function(plate){
 	this.plate = plate;
@@ -123,8 +132,17 @@ var Menu = function(plate){
 }
 
 	Menu.prototype.create = function(){
-		var foodList = $('<div class="menu">').text( 'Love Our Food:').append( burritoPlate.create(), guacamolePlate.create(),  margaritaDrink.create());
+		var foodList = $('<div class="foodList">');
+		var food = $('<h2></h2>').text( 'Love Our Food:');
+		// var drinkList = $('<div class="drinkList">');
+		var bev = $('<h2></h2>').text( 'Love Our Drinks: ');
+		foodList.append(food, [burritoPlate.create(), guacamolePlate.create()], bev, [margaritaDrink.create()]);
+		// foodList.append( burritoPlate.create(), guacamolePlate.create() )
+		// drinkList.append(drink);
+		// drinkList.append( margaritaDrink.create() );
+
 			return foodList;
+
 	}
 
 	// Menu.prototype.toString = function(){
@@ -138,8 +156,12 @@ var Restaurant = function(name, description, menu){
 	this.menu = menu;
 }
 	
-	Restaurant.prototype.create = function(){
-		var joint= $('<div class="restaurant">').text("Welcome to " + this.name + '\n' + this.description).append(MexMenu.create());
+	Restaurant.prototype.create = function(){ 
+		var joint = $('<div class="restaurant">');
+		var header = $('<div class="page-header">');
+		var title = $('<h1 class="title"></h1>').text('Welcome to ' + this.name);
+		header.append(title);
+		joint.append(header).append(MexMenu.create());
 			return joint;
 	}
 
@@ -172,7 +194,15 @@ var MexRestaurant = new Restaurant('BoCoMex ', 'The worst Mexican food in Colora
 // console.log(burritoPlate.create());
 // $('.container').append(burritoPlate.create());
 
-
+// Event Handler for Placing Order
+$('.container').on('click', '.order-btn', function(){
+	var addOrder = confirm('Would you like to add this to your order?');
+	if (addOrder){
+		var orderItem = this.closest('div');
+		$('.order-list').show().append(orderItem);
+		console.log(orderItem);
+	}
+});
 
 
 

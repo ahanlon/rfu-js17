@@ -1,0 +1,119 @@
+.container {
+  display: inline-block;
+  position: relative;
+  width: auto;
+  height: auto;
+  padding: 0 25%;
+}
+
+.restaurant {
+  display: inline-block;
+  position: absolute;
+  width: 675px;
+}
+
+.page-header {
+	background-color: green;
+	padding-left: 10px;
+}
+
+.title {
+	display: inline-block;
+	color: white;
+	margin: 15px 0;
+
+}
+
+.menu-item {
+  border: solid;
+  display: inline-block;
+  position: relative;
+  border-radius: 150px;
+  width: 300px;
+  height: 300px;
+  padding: 7px;
+  line-height: 300px;
+  margin: 0 4px;
+  float: left;
+}
+
+.foodList {
+	padding: .1px 0;
+	height: 900px;
+}
+
+h2 {
+	color: red;
+	height: 28px;
+}
+
+.order-btn{
+	float: right;
+	position: absolute;
+	right: 135px;
+	bottom: 30px;
+	background-color: lightgreen;
+	border-radius: 5px;
+}
+
+p {
+	vertical-align: middle;
+ 	text-align: center;
+}
+
+.order-list {
+  position: relative;
+  float: right;
+  top: 14px; 
+  /* right: 24%; */
+  background-color: red;
+  color: white;
+  width: 200px;
+  height: 800px;
+  display: none;
+}
+
+.food {
+	line-height: 0;
+	position: absolute;
+}
+
+.name {
+	font-weight: bold;
+	top: 117px;
+	padding: 0 39%;
+}
+
+.descrip {
+	top: 141px;
+	padding: 0 29%;
+}
+
+.price {
+	top: 165px;
+	padding: 0 47%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
