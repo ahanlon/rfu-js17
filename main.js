@@ -40,36 +40,34 @@ var FoodItem = function(name, cal, vegan, glutenFree, citrusFree ){
 
 // Object Classes
 
-var Drink = function(name, description, price, ingredients){
+var Drink = function(name, description, price, ingredients, id){
 
 	this.name 			= name;
 	this.description	= description;
 	this.price			= price;
 	this.ingredients	= ingredients;
+	this.id 			= id;
 }
 	
 	Drink.prototype.create = function(){
-			var drink = $('<div class="menu-item">');
+			var drink = $('<div class="menu-item">').attr("data-id", this.id);
 			var descrip = $('<p> class="descrip"</p>').text( this.name + ' \n' + this.description + ' \n' + '$' + this.price );
 			drink.append(descrip, buyButton);
 			return drink;
 		}
-	// Drink.prototype.toString = function(){
-	// 	var beverage = " Name: " + this.name + " Description: " + this.description + " Price: $" + this.price + " Ingredients: " + this.ingredients;
-	// 	return beverage;
-	// }
 
 
-var Plate = function(name, description, price, ingredients){
+var Plate = function(name, description, price, ingredients, id){
 
 	this.name 			= name;
 	this.description	= description;
 	this.price			= price;
 	this.ingredients	= ingredients;
+	this.id 			= id;
 }
 	// my create function to create the Div in the DOM
 	Plate.prototype.create = function(){
-			var food = $('<div class="menu-item">');
+			var food = $('<div class="menu-item">').attr("data-id", this.id);
 			var foodName = $('<div class="food name"></div>').text( this.name );
 			var foodDescrip = $('<div class="food descrip"></div>').text( this.description );
 			var foodPrice = $('<div class="food price"></div>').text("$" + this.price);
@@ -79,11 +77,6 @@ var Plate = function(name, description, price, ingredients){
 
 		}
 
-
-	// Plate.prototype.toString = function(){
-	// 		var dinner = " Name: " + this.name + " Description: " + this.description + " Price: $" + this.price + " Ingredients: " + this.ingredients;
-	// 		return dinner;
-	// 	}
 
 		Plate.prototype.isVegan = function(){
 			for(var i = 0; i < ingredients.length; i++){
@@ -112,11 +105,11 @@ var Plate = function(name, description, price, ingredients){
 			}
 		}
 
-		var burritoPlate = new Plate('El Burrito', 'A delicious burrito! ', 8, [burrito, rice, beans]);
+		var burritoPlate = new Plate('El Burrito', 'A delicious burrito! ', 8, [burrito, rice, beans], 0);
 
-		var guacamolePlate = new Plate('The Guac', 'Green and Good! ', 4, [guacamole, cornChips, salsa]);
+		var guacamolePlate = new Plate('The Guac', 'Green and Good! ', 4, [guacamole, cornChips, salsa], 1);
 
-		var margaritaDrink = new Drink('Margarita', 'Top Shelf! ', 12, [tequila, sweetSour, salt]);
+		var margaritaDrink = new Drink('Margarita', 'Top Shelf! ', 12, [tequila, sweetSour, salt], 2);
 
 var Order = function(plate){
 	this.plate = plate;
@@ -127,35 +120,29 @@ var Order = function(plate){
 			return ticket;
 		}
 
+// Menu Object
 var Menu = function(plate){
 	this.plate = plate;
 }
-
+	// Menu create method
 	Menu.prototype.create = function(){
 		var foodList = $('<div class="foodList">');
 		var food = $('<h2></h2>').text( 'Love Our Food:');
 		// var drinkList = $('<div class="drinkList">');
 		var bev = $('<h2></h2>').text( 'Love Our Drinks: ');
 		foodList.append(food, [burritoPlate.create(), guacamolePlate.create()], bev, [margaritaDrink.create()]);
-		// foodList.append( burritoPlate.create(), guacamolePlate.create() )
-		// drinkList.append(drink);
-		// drinkList.append( margaritaDrink.create() );
 
 			return foodList;
-
 	}
 
-	// Menu.prototype.toString = function(){
-	// 		var foodList = "Pick a Plate: " + this.plate;
-	// 		return foodList;
-	// 	}
+// Restaurant object
 
 var Restaurant = function(name, description, menu){
 	this.name 	= name;
 	this.description = description;
 	this.menu = menu;
 }
-	
+	// Restaurant create method
 	Restaurant.prototype.create = function(){ 
 		var joint = $('<div class="restaurant">');
 		var header = $('<div class="page-header">');
@@ -166,10 +153,6 @@ var Restaurant = function(name, description, menu){
 	}
 
 
-	// Restaurant.prototype.toString = function(){
-	// 	var joint = "Welcome to: " + this.name + " Description: " + this.description + " Menu: " + this.menu;
-	// 	return joint;
-	// }
 
 var Customer = function(dietaryPreference){
 	this.dietaryPreference = dietaryPreference;
@@ -184,23 +167,28 @@ var Customer = function(dietaryPreference){
 
 var MexMenu = new Menu([burritoPlate, guacamolePlate, margaritaDrink]);
 console.log(MexMenu.create());
- // $('.container').append(MexMenu.create());
+
 
 var MexRestaurant = new Restaurant('BoCoMex ', 'The worst Mexican food in Colorado!', MexMenu);
  $('.container').append(MexRestaurant.create());
 
-// console.log(MexRestaurant.toString()); // this is the final output for JS16: Restaurant objects
-
-// console.log(burritoPlate.create());
-// $('.container').append(burritoPlate.create());
-
+var CustomerOrder = new Order(itemsOrdered);
+var itemsOrdered = [];
 // Event Handler for Placing Order
 $('.container').on('click', '.order-btn', function(){
 	var addOrder = confirm('Would you like to add this to your order?');
 	if (addOrder){
-		var orderItem = this.closest('div');
-		$('.order-list').show().append(orderItem);
-		console.log(orderItem);
+		var orderItem = $(this).closest('.menu-item').data('id');
+		var item = _.find(MexMenu.plate, function(plate){
+			return plate.id === orderItem;
+		});
+		// console.log(item);
+		var displayItem = item.name + " " + item.description + " " + item.price;
+		itemsOrdered.push(displayItem); // Pushes each ordered item to an array
+		console.log(itemsOrdered); // Displays array of ordered items.
+
+		$('.order-list').show().append(CustomerOrder);
+		
 	}
 });
 
