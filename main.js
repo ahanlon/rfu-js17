@@ -36,7 +36,7 @@ var FoodItem = function(name, cal, vegan, glutenFree, citrusFree ){
 	var sweetSour = new FoodItem('sweetSour', 100, true, true, false);
 	var salt = new FoodItem('salt', 0, true, true, true);
 
-	var buyButton = $('<button class="order-btn">Order</button>');
+	var buyButton = $('<button class="btn order">Order</button>');
 
 // Object Classes
 
@@ -164,7 +164,6 @@ var Customer = function(dietaryPreference){
 	}
 
 
-
 var MexMenu = new Menu([burritoPlate, guacamolePlate, margaritaDrink]);
 console.log(MexMenu.create());
 
@@ -172,24 +171,46 @@ console.log(MexMenu.create());
 var MexRestaurant = new Restaurant('BoCoMex ', 'The worst Mexican food in Colorado!', MexMenu);
  $('.container').append(MexRestaurant.create());
 
-var CustomerOrder = new Order(itemsOrdered);
-var itemsOrdered = [];
+
+
+var itemsOrdered = []; // array of ordered items
 // Event Handler for Placing Order
-$('.container').on('click', '.order-btn', function(){
+$('.container').on('click', '.btn.order', function(){
+	
+
 	var addOrder = confirm('Would you like to add this to your order?');
+	
 	if (addOrder){
+		// this returns the plate that was clicked
 		var orderItem = $(this).closest('.menu-item').data('id');
 		var item = _.find(MexMenu.plate, function(plate){
 			return plate.id === orderItem;
 		});
-		// console.log(item);
-		var displayItem = item.name + " " + item.description + " " + item.price;
-		itemsOrdered.push(displayItem); // Pushes each ordered item to an array
-		console.log(itemsOrdered); // Displays array of ordered items.
 
-		$('.order-list').show().append(CustomerOrder);
-		
+	itemsOrdered.push(item.price); // Pushes each ordered item to an array
+
+	// Creates the display language and displays the each ordered item
+	var displayItem = item.name + " $" + item.price + '\n';
+	var orderList = $('<div class="order-list"</div>').text(displayItem); 
+	
+	var sum = _.reduce(itemsOrdered, function(memo, num){return memo + num}, 0); // This sums the value of the array of ordered items
+
+	// Adds the order total language and amount
+	var orderTotal = $('<div class="order-total"></div>').text('Total Order Amount: $' + sum);
+	
+	// Makes the order window visible and then appends the ordered items and running total
+	$('.order-total').remove(); // this is here to remove previous totals and before adding the new total
+	$('.order-window').append(orderList, orderTotal).show();
+
 	}
+});
+// this event handler removes the order window and resets for a new order
+$('.btn.place').on('click', function(){
+	$('.order-window').hide(); // hide the order
+	$('.order-list').remove(); // remove the list of items ordered
+
+	itemsOrdered.length = 0; // reset the array to empty
+	confirm('Thank you for your order!!!');
 });
 
 

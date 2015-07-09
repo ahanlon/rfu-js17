@@ -34,7 +34,6 @@
   padding: 7px;
   line-height: 300px;
   margin: 0 4px;
-  float: left;
 }
 
 .foodList {
@@ -47,13 +46,22 @@ h2 {
 	height: 28px;
 }
 
-.order-btn{
-	float: right;
+.btn{
 	position: absolute;
-	right: 135px;
-	bottom: 30px;
 	background-color: lightgreen;
 	border-radius: 5px;
+}
+
+.btn.order {
+  float: right;
+  right: 135px;
+  bottom: 30px;
+}
+
+.btn.place {
+  float: right;
+  right: 60px;
+  bottom: 30px;
 }
 
 p {
@@ -61,15 +69,15 @@ p {
  	text-align: center;
 }
 
-.order-list {
+.order-window {
+  padding: 0 10px;
   position: relative;
   float: right;
   top: 14px; 
-  /* right: 24%; */
   background-color: red;
   color: white;
   width: 200px;
-  height: 800px;
+  height: 300px;
   display: none;
 }
 
@@ -92,6 +100,11 @@ p {
 .price {
 	top: 165px;
 	padding: 0 47%;
+}
+
+.order-total {
+  position: absolute;
+  bottom: 0px;
 }
 
 
